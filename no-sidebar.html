@@ -48,14 +48,22 @@
 								</p>
 							</header>
 							<a href="#" class="image featured"><img src="images/cycleganmodel.png" alt="" /></a>
-							<p>
-								Commodo id natoque malesuada sollicitudin elit suscipit. Curae suspendisse mauris posuere accumsan massa
-								posuere lacus convallis tellus interdum. Amet nullam fringilla nibh nulla convallis ut venenatis purus
-								lobortis. Auctor etiam porttitor phasellus tempus cubilia ultrices tempor sagittis. Nisl fermentum
-								consequat integer interdum integer purus sapien. Nibh eleifend nulla nascetur pharetra commodo mi augue
-								interdum tellus. Ornare cursus augue feugiat sodales velit lorem. Semper elementum ullamcorper lacinia
-								natoque aenean scelerisque vel lacinia mollis quam sodales congue.
-							</p>
+								<p style="font-family: 나눔바른고딕;">
+									<strong>Pix2Pix</strong> 네트워크에서 발전한 <strong>Image Translation Model</strong>인 <strong>CycleGAN</strong>을 바탕으로 이용한 프로젝트입니다. 기존의 <strong>CycleGAN</strong>은 쌍으로 존재하지 않은 서로 다른 도메인의 이미지를 다른 도메인으로 바꾸기 위해 나온 모델입니다. 말과 얼룩말, 모네의 그림과 사진같은 데이터처럼, 같은 위치에서 똑같은 구도로 찍힐 수 없는 데이터를 위한 모델입니다. 그래서 저희는 이 모델을 음악에 적용시켜 보았습니다. 동일한 음악이 여러장르에 존재하고 있지 않기 때문에 쌍으로 존재하지 않는 데이터셋이어서 <strong>CycleGAN</strong>을 이용해 다른 장르의 음악으로 편곡하였습니다. 
+								</p>
+							
+								<header> <br><br>
+								<h2><a href="#">Feature Map Image</a></h2>
+								<p style="font-family: 나눔바른고딕;">
+								 	하와와 
+								</p>
+							</header>
+							<a href="#" class="image featured"><img src="images/featuremap.png" alt="" /></a>
+							<p style="font-family: 나눔바른고딕;">
+								데이터를 정형화 시키기 위해서 <strong>4/4</strong>박자의 곡 중 진행 중 변박이 없는 곡만을 선택했습니다. 그 이후 <strong>16 time step</strong>로 샘플링을 했고, 음악에 주로 쓰이는 음역대인 <strng>84</strng>음계로 음역대를 한정했습니다. 이렇게 샘플링 된 데이터를 4묶음 씩 사용해 <strong>16 by 84</strong>의 데이터 행렬을 만듭니다. 입력 데이터의 채널은 악기의 수 입니다. 화성악 등 여러 이슈등을 해결하기 위해 여러 악기들로 구성들 트랙들을 피아노로 모두 합치고, 드럼 파트는 삭제해서 악기 구성하는 채널이 <strong>1</strong>이 되었습니다. 위 아키텍쳐는 악 장르의 음악에서 <strong>CNN</strong>을 이용해 기본적인 특징을 추출하는 과정입니다.
+							</p>s
+							
+
 							<section>
 								<header>
 									<h3>Ultrices tempor sagittis nisl</h3>
