@@ -66,30 +66,30 @@
 
 							<section>
 								<header>
-									<h3>Ultrices tempor sagittis nisl</h3>
+									<h3>Symbolic Music Genre Transfer with Cycle GAN</h3>
 								</header>
 								<p>
-									Nascetur volutpat nibh ullamcorper vivamus at purus. Cursus ultrices porttitor sollicitudin imperdiet
-									at pretium tellus in euismod a integer sodales neque. Nibh quis dui quis mattis eget imperdiet venenatis
-									feugiat. Neque primis ligula cum erat aenean tristique luctus risus ipsum praesent iaculis. Fermentum elit
-									fringilla consequat dis arcu. Pellentesque mus tempor vitae pretium sodales porttitor lacus. Phasellus
-									egestas odio nisl duis sociis purus faucibus morbi. Eget massa mus etiam sociis pharetra magna.
+									기본적인 도메인 트렌스퍼는 소스와 타겟 도메인에 대한 깊은 이해가 필요하다. 도메인에 대한 이해를 위해 복잡한 특징 추출을 해야하며, Variational AutoEncoder, GAN과 같은 Deep generative model들이 task에서 잘 작동한다. 음악의 경우 장르를 도메인으로 볼 수 있으며, 음악의 domain transfer의 대표적인 예는 커버송으로 들 수 있다. 사람이 들을 때 어색하지 않기 위해서는 많고 정교한 작업이 필요하며 특히 짧은 락 음악을 가지고 교황곡을 만드는 것은 더 많은 분석과 노력이 필요하다. 도메인 트렌스퍼는 이런 작업을 가속화 혹은 자동화가 가능하게 한다. 필요한 특징들은 Pre-Trained CNN에서 추출하여 사용한다. 보존 될 특징에 엄격한 명시적인 규칙이 없어 실험자가 규칙을 찾거나 만들어야 한다. Cycle Consistency손실은 내용의 보존을 돕고, 네트워크가 도메인을 바꾸는 것을 돕는다. Cycle GAN은 이미지 도메인 변환에 성공적인 구조이며, 이를 바탕으로 Symbolic Music 장르 변환에 사용한다. 
 								</p>
 								<p>
-									Eleifend auctor turpis magnis sed porta nisl pretium. Aenean suspendisse nulla eget sed etiam parturient
-									orci cursus nibh. Quisque eu nec neque felis laoreet diam morbi egestas. Dignissim cras rutrum consectetur
-									ut penatibus fermentum nibh erat malesuada varius.
+									화성음악을 도메인 변환시킬 때 노트의 피치 변경을 통해서 변화시키기 때문에 도메인 전송의 강도와 원래 입력의 내용을 유지하는 것의 균형을 위해 추가적인 식별자를 도입했다. 장르 변환을 효과적으로 확인하기 위해 장르 분규기를 도입하며, 이는 단순히 네트워크 상에서만 분류되는 것이 아니라 사람이 들을만한 상태로 만다는 효과를 가져온다.
 								</p>
 							</section>
 							<section>
 								<header>
-									<h3>Augue euismod feugiat tempus</h3>
+									<h3>Cycle GAN Related Work</h3>
 								</header>
 								<p>
-									Pretium tellus in euismod a integer sodales neque. Nibh quis dui quis mattis eget imperdiet venenatis
-									feugiat. Neque primis ligula cum erat aenean tristique luctus risus ipsum praesent iaculis. Fermentum elit
-									ut nunc urna volutpat donec cubilia commodo risus morbi. Lobortis vestibulum velit malesuada ante
-									egestas odio nisl duis sociis purus faucibus morbi. Eget massa mus etiam sociis pharetra magna.
+									Gatys et al 뉴럴 스타일 트렌스터의 컨셉을 설명한다. Pre-Trained CNN을 이용해 두 이미지의 스타일과 컨텐츠를 합친다. Cycle GAN같은 접근에서는 명시적인 스타일 특성 추출이 요구되지 않는다. 대신 데이터 도메인의 변경을 위해서 쌍의 생성기가 사용된다. 두 도메인 특성은 추출된 특징의 종류를 암시적으로 명시해준다. A 도메인이 사진으로 B가 그림이라면, Cycle GAN은 A ->B , B->A 둘 다 작동시킨다. 우리는 미디 파일을 가지고 이와 동일한 방법으로 Cycle GAN 구조를 이용했다. GAN 학습은 보통 안정적이지 못하기 때문에 생성기와 판별기의 밸런스를 특히 조심스럽게 맞춰야한다. 이를 위해 Normalization leakyReLU등의 기법을 사용하였고, G & D의 input size = batch*64*84*1, pitch를 [0,1]로 정규화하는 작업을 진행하였다.
+								</p>
+							</section>
+							<section>
+								<header>
+									<h3>Dataset and Preprocessing</h3>
+								</header>
+								<p>
+									On은 연주의 시작을 의미하며, 음표의 음량을 지정한다. Off는 종료를 의미한다. 각 음표는 고유의 피치(높낮이)를 가졌고, 미디에서 0-127의 범위를 가지며 velocity(음량)도 0-127의 범위를 가진다. 표준 피아노 미디에서는 21-108 범위에서 연주한다. 미디를 네트워크에 넣기 위해선 Piano-roll이라고 하는 매트릭스로 바꿔야 한다. 이것은 Python의 pretty-midi와 pypianoroll을 이용해서 가능하다. 미디의 note는 임의의 길이를 가진다. 그렇기에 time을 이산화 하고 행렬 표현을 위해 resampling이 필요하다. 그렇기에 우리는 마디당 16 time step의 sampling rate를 사용하였으며, 가장 짧은 음을 16분 음표로 정하였다. Paino-roll을 이요해 t by p 행렬을 만들었다. t = time step(t=16)이며 p = pitch이다. 학습을 좀 더 쉽게 하기 위해 음량 정보를 누락시켜 모든 음량을 127로 고정시켰다. 128의 가능성을 제외하고 오로지 on off 두 가지로 제한하였다. piano-roll은 각 time 단계에서 k hot벡터를 포함하며, k는 동시에 연수되는 음의 수이다. 우리는 일반적인 연주 범위인 C1-C8을 기본으로 잡아 p=84로 지정하였다. piano-roll의 마디당 16 by 84의 행렬을 만들고, 훈련 샘플로 4연속 마디를 사용해 64 by 84 형태의 샘플로 표현하였다.
+									</p> <P>원래 midi는 다중 트랙을 가질 수 있고 각 트랙은 다른 악기로 구성된다. 음색의 주요 집합을 선택하지 않으면 곡의 스타일이 손실될 수 있다. 또한 다른 장르이지만 비슷한 멜로디를 가지고 있고, 다른 반주를 가진 경우 음표만 고려해서는 정확한 분류가 어렵다. 이를 해결하기 위해 다른 연구에서 제한된 voice를 택하였지만, 우리는 모든 트랙을 단일 트랙으로 합치는 방법을 사용하였다. 이에 따라 모든 음이 같은 악기로 연주되어 어수선하거나 그 곡의 분위기를 제대로 살리지 못한다는 문제점을 가지고 있으며, 또한 드럼 트랙을 무시하였기에 풍부한 표현에 제한이 있다. 우리는 이 문제점을 인정하여 교향곡과 같은 너무 많은 악기나 목소리가 존재하는 곡은 실험에서 배제시켰다. 미디 선정 기준은 시작비트가 0이 아닌 것, 곡 진행 도중 변박이 생기거나 4/4박자가 아닌 것은 필터링을 거쳐 배제 시켰다.
 								</p>
 							</section>
 						</article>
